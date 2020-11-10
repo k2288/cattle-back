@@ -1,12 +1,13 @@
-import { Controller, Get, Headers } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(@Headers('accept-language') acceptLanguage: any): string {
-    return acceptLanguage;
+  async getHello(@I18n() i18n: I18nContext) {
+    return await i18n.translate('lang.HELLO');
   }
 }

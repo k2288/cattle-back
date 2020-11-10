@@ -10,7 +10,7 @@ import { LoginResponseDto } from './dto/login-response.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post()
+  @Post('/phone')
   async create(@Body() createUserDto: CreateUserDto) {
     await this.authService.generateCode(createUserDto);
     return {};
@@ -20,7 +20,9 @@ export class AuthController {
   @ApiOkResponse({
     type: LoginResponseDto,
   })
-  async validateAuthCode(@Body() validateAuthcodeDto: ValidateAuthcodeDto) {
+  async validateAuthCode(
+    @Body() validateAuthcodeDto: ValidateAuthcodeDto,
+  ): Promise<LoginResponseDto> {
     return await this.authService.login(validateAuthcodeDto);
   }
 }

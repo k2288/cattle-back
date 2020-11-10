@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
+import { HeaderResolver, I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import path from 'path';
 
 @Module({
   imports: [
@@ -16,6 +18,14 @@ import { ConfigModule } from '@nestjs/config';
       `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=admin`,
       { useNewUrlParser: true },
     ),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      parser: I18nJsonParser,
+      parserOptions: {
+        path: path.join(__dirname, '/i18n/'),
+      },
+      resolvers: [new HeaderResolver(['x-custom-lang'])],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
