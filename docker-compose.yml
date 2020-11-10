@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    environment:
+      - MONGO_HOST=localhost
+      - MONGO_PORT=27017
+      - MONGO_USER=root
+      - MONGO_PASSWORD=password
+      - MONGO_DB=pin
+      - jwtPrivateKey=jwtPrivateKey
+      - ghasedak_api_key=711ef21df5961e8ae3b17053074afc441574564c1caf78daf4b46a3909f850f1
+    volumes:
+      - /node_modeules
+      - ./:/app
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    command: "npm start"
