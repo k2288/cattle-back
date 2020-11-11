@@ -9,6 +9,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const options = new DocumentBuilder()
+    .addSecurity('bearer', { type: 'http', scheme: 'bearer' })
+    .addBearerAuth()
     .setTitle('Cats example')
     .setDescription('The cats API description')
     .setVersion('1.0')
