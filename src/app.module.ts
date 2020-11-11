@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { HeaderResolver, I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import { LivestockModule } from './livestock/livestock.module';
 import path from 'path';
 
 @Module({
@@ -26,6 +27,7 @@ import path from 'path';
       },
       resolvers: [new HeaderResolver(['x-custom-lang'])],
     }),
+    LivestockModule,
   ],
   controllers: [AppController],
   providers: [AppService],
