@@ -12,8 +12,7 @@ export class AuthController {
 
   @Post('/phone')
   async create(@Body() createUserDto: CreateUserDto) {
-    await this.authService.generateCode(createUserDto);
-    return {};
+    return await this.authService.generateCode(createUserDto);
   }
 
   @Post('/code')

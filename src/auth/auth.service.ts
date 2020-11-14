@@ -32,9 +32,11 @@ export class AuthService {
     );
     const authCode = new this.authModel(createAuthCodeDto);
     await authCode.save();
+    return user;
   }
 
   async login(validateAuthCodeDto: ValidateAuthcodeDto) {
+
     const authCode = await this.authModel.findOne({
       code: validateAuthCodeDto.code,
     });
@@ -44,7 +46,7 @@ export class AuthService {
     if (user.phone !== validateAuthCodeDto.phone)
       throw new BadRequestException();
 
-    const token = this.jwtService.sign({ id: user.id });
+    const token = this.jwtService.sign({ user_id: user.id });
 
     return { token: token };
   }
