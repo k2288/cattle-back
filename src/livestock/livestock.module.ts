@@ -12,6 +12,7 @@ import { LivestockStateModule } from '../livestock-state/livestock-state.module'
       { name: Livestock.name, schema: LivestockSchema },
     ]),
   ],
+  exports: [LivestockService],
   controllers: [LivestockController],
   providers: [LivestockService],
 })

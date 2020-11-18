@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { HeaderResolver, I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import { LivestockModule } from './livestock/livestock.module';
 import { LivestockStateModule } from './livestock-state/livestock-state.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 import path from 'path';
 
 @Module({
@@ -30,6 +31,7 @@ import path from 'path';
     }),
     LivestockModule,
     LivestockStateModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

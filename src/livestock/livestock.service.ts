@@ -14,6 +14,7 @@ import { ListAllLivestockDto } from './dto/list-all-livestock.dto';
 import { Model } from 'mongoose';
 import { ListAllLivestockStateDto } from './dto/list-all-livestock-state.dto';
 import { AddLivestockMilkDto } from './dto/add-livestock-milk.dto';
+import { dashboardConst } from '../dashboard/dashboard.const';
 
 @Injectable({ scope: Scope.REQUEST })
 export class LivestockService {
@@ -143,5 +144,25 @@ export class LivestockService {
     if (!livestock) throw new NotFoundException();
 
     return {};
+  }
+
+  getStateCount(state: any) {
+    if (dashboardConst.TOTAL === state) {
+      return this.livestockModel.count({
+        user_id: (this.request.user as AuthPayload).user_id,
+      });
+    } else {
+      return this.livestockModel.count({
+        user_id: (this.request.user as AuthPayload).user_id,
+        state: state,
+      });
+    }
+  }
+
+  async getGenderCount(gender: any) {
+    return this.livestockModel.count({
+      user_id: (this.request.user as AuthPayload).user_id,
+      gender: gender,
+    });
   }
 }

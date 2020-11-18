@@ -24,5 +24,4 @@ export class AuthController {
   ): Promise<LoginResponseDto> {
     return await this.authService.login(validateAuthcodeDto);
   }
-
 }
