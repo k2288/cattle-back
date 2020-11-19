@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { LivestockService } from '../livestock/livestock.service';
 import { dashboardConst } from './dashboard.const';
-import { Dashboard } from './models/dashboard';
+import { DashboardDto } from './dto/dashboard.dto';
 
 @Injectable()
 export class DashboardService {
   constructor(private livestockService: LivestockService) {}
 
   async getAll() {
-    return new Dashboard(
+    return new DashboardDto(
       await this.livestockService.getStateCount(dashboardConst.TOTAL),
       await this.livestockService.getStateCount(dashboardConst.DRY),
       await this.livestockService.getStateCount(dashboardConst.CALVED),
