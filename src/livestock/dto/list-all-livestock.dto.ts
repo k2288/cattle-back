@@ -7,13 +7,23 @@ export class ListAllLivestockDto extends ListAllEntitiesDto {
   @ApiProperty({ type: [String] })
   @IsArray()
   @IsOptional()
-  @Transform((value: string) => value.split(','))
+  @Transform((value: string) => {
+    if (typeof value === 'string') {
+      return [value];
+    }
+    return value;
+  })
   readonly state?: string[];
 
   @ApiProperty({ type: [String] })
   @IsArray()
   @IsOptional()
-  @Transform((value: string) => value.split(','))
+  @Transform((value: string) => {
+    if (typeof value === 'string') {
+      return [value];
+    }
+    return value;
+  })
   readonly gender?: string[];
 
   @ApiProperty()

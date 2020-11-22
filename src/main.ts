@@ -11,8 +11,8 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .addSecurity('bearer', { type: 'http', scheme: 'bearer' })
     .addBearerAuth()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('Pin Herd')
+    .setDescription('The PinHerd API description')
     .setVersion('1.0')
     .addTag('auth')
     .build();

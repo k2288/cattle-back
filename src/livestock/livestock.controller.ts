@@ -21,6 +21,7 @@ import { CreateLivestockStateDto } from './dto/create-livestock-state.dto';
 import { ListAllLivestockDto } from './dto/list-all-livestock.dto';
 import { ListAllLivestockStateDto } from './dto/list-all-livestock-state.dto';
 import { AddLivestockMilkDto } from './dto/add-livestock-milk.dto';
+import { LivestockState } from '../livestock-state/schemas/livestock-state.schema';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
@@ -30,8 +31,8 @@ export class LivestockController {
   constructor(private readonly livestockService: LivestockService) {}
 
   @Post()
-  create(@Body() createLivestockDto: CreateLivestockDto) {
-    return this.livestockService.create(createLivestockDto);
+  async create(@Body() createLivestockDto: CreateLivestockDto) {
+    return await this.livestockService.create(createLivestockDto);
   }
 
   @Get()
@@ -65,7 +66,7 @@ export class LivestockController {
   @Post(':id/state')
   createState(
     @Param('id') id: string,
-    createLivestockStateDto: CreateLivestockStateDto,
+    @Body() createLivestockStateDto: CreateLivestockStateDto,
   ) {
     return this.livestockService.createState(id, createLivestockStateDto);
   }
@@ -74,13 +75,21 @@ export class LivestockController {
   updateState(
     @Param('id') id: string,
     @Param('stateId') stateId: string,
-    createLivestockStateDto: CreateLivestockStateDto,
+    @Body() createLivestockStateDto: CreateLivestockStateDto,
   ) {
     return this.livestockService.updateState(
       id,
       stateId,
       createLivestockStateDto,
     );
+  }
+
+  @Delete(':id/state/:stateId')
+  @ApiOkResponse({
+    type: LivestockState,
+  })
+  deleteState(@Param('id') id: string, @Param('stateId') stateId: string) {
+    return this.livestockService.deleteState(id, stateId);
   }
 
   @Get(':id/state')

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
+import { IsOnlyDate } from '../../is-only-date.decorator';
 
 export class CreateLivestockDto {
   @ApiProperty()
@@ -7,7 +8,7 @@ export class CreateLivestockDto {
   tagNo: string;
 
   @ApiProperty()
-  @IsDate()
+  @IsOnlyDate()
   birthDate: Date;
 
   @ApiProperty()

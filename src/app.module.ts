@@ -11,12 +11,18 @@ import { LivestockModule } from './livestock/livestock.module';
 import { LivestockStateModule } from './livestock-state/livestock-state.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SettingModule } from './setting/setting.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import path from 'path';
+
+
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'public'),
+    }),
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
       `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=admin`,

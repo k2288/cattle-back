@@ -6,6 +6,9 @@ import { ApiProperty } from '@nestjs/swagger';
 @Schema({ timestamps: true })
 export class Livestock extends Document {
   @ApiProperty()
+  _id: Types.ObjectId;
+
+  @ApiProperty()
   @Prop()
   tagNo: string;
 
@@ -25,7 +28,6 @@ export class Livestock extends Document {
   @Prop()
   inseminator: string;
 
-  @ApiProperty()
   @Prop()
   user_id?: string;
 

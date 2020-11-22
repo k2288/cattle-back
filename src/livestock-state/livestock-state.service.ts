@@ -61,4 +61,13 @@ export class LivestockStateService {
         .skip(query.offset),
     );
   }
+
+  findLivestockStateAndRemove(livestock_id: string, stateId: string) {
+    const state = this.livestockStateModel.findOneAndRemove({
+      livestock_id: livestock_id,
+      _id: stateId,
+    });
+    if (!state) throw new NotFoundException();
+    return state;
+  }
 }

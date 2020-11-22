@@ -6,8 +6,8 @@ import { SettingDto } from './dto/setting.dto';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
-@ApiTags('Setting')
-@Controller('setting')
+@ApiTags('Settings')
+@Controller('/v1/settings')
 export class SettingController {
   constructor(private settingService: SettingService) {}
   @Get()

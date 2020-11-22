@@ -15,6 +15,7 @@ import { Model } from 'mongoose';
 import { ListAllLivestockStateDto } from './dto/list-all-livestock-state.dto';
 import { AddLivestockMilkDto } from './dto/add-livestock-milk.dto';
 import { dashboardConst } from '../dashboard/dashboard.const';
+import { ObjectID } from 'mongodb';
 
 @Injectable({ scope: Scope.REQUEST })
 export class LivestockService {
@@ -53,21 +54,23 @@ export class LivestockService {
 
   async findOne(id: string) {
     return this.livestockModel.findOne({
-      _id: id,
+      _id: new ObjectID(id),
       user_id: (this.request.user as AuthPayload).user_id,
     });
   }
 
   async update(id: string, updateLivestockDto: UpdateLivestockDto) {
-    return this.livestockModel.findOneAndUpdate(
+    const livestock = this.livestockModel.findOneAndUpdate(
       { _id: id, user_id: (this.request.user as AuthPayload).user_id },
       updateLivestockDto,
     );
+    if (!livestock) throw new NotFoundException();
+    return {};
   }
 
   async remove(id: string) {
     const livestock = await this.livestockModel.findOneAndRemove({
-      _id: id,
+      _id: new ObjectID(id),
       user_id: (this.request.user as AuthPayload).user_id,
     });
 
@@ -129,7 +132,6 @@ export class LivestockService {
 
   async findAllState(id: string, query: ListAllLivestockStateDto) {
     const livestock = await this.findOne(id);
-
     if (!livestock) throw new NotFoundException();
 
     return this.livestockStateService.findAllLivestockState(id, query);
@@ -164,5 +166,20 @@ export class LivestockService {
       user_id: (this.request.user as AuthPayload).user_id,
       gender: gender,
     });
+  }
+
+  async deleteState(id: string, stateId: string) {
+    const livestock = await this.findOne(id);
+
+    if (!livestock) throw new NotFoundException();
+
+    const state = this.livestockStateService.findLivestockStateAndRemove(
+      id,
+      stateId,
+    );
+
+    this.updateLivestockLastState(id, livestock);
+
+    return state;
   }
 }
