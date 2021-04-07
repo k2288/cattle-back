@@ -29,12 +29,12 @@ export class LivestockStateService {
       .sort({ date: -1, createdAt: -1 });
   }
 
-  findLivestockStateAndUpdate(
+  async findLivestockStateAndUpdate(
     livestock_id: string,
     stateId: string,
     updateLivestockStateDto: UpdateLivestockStateDto,
   ) {
-    const state = this.livestockStateModel.findOneAndUpdate(
+    const state = await this.livestockStateModel.findOneAndUpdate(
       { livestock_id: livestock_id, _id: stateId },
       updateLivestockStateDto,
     );

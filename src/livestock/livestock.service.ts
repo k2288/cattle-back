@@ -60,7 +60,7 @@ export class LivestockService {
   }
 
   async update(id: string, updateLivestockDto: UpdateLivestockDto) {
-    const livestock = this.livestockModel.findOneAndUpdate(
+    const livestock = await this.livestockModel.findOneAndUpdate(
       { _id: id, user_id: (this.request.user as AuthPayload).user_id },
       updateLivestockDto,
     );
@@ -109,7 +109,7 @@ export class LivestockService {
 
     if (!livestock) throw new NotFoundException();
 
-    this.livestockStateService.findLivestockStateAndUpdate(
+    await this.livestockStateService.findLivestockStateAndUpdate(
       id,
       stateId,
       updateLivestockStateDto,
