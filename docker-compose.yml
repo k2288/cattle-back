@@ -1,13 +1,27 @@
 version: "3.8"
 
 services:
+  mongo:
+    image: mongo:4.4
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: pin
+    volumes:
+      - cattle_mongo_data:/data/db
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     working_dir: /app
+    depends_on:
+      - mongo
     environment:
-      - MONGO_HOST=localhost
+      - PORT=3000
+      - MONGO_HOST=mongo
       - MONGO_PORT=27017
       - MONGO_USER=root
       - MONGO_PASSWORD=password
@@ -15,10 +29,13 @@ services:
       - jwtPrivateKey=jwtPrivateKey
       - ghasedak_api_key=711ef21df5961e8ae3b17053074afc441574564c1caf78daf4b46a3909f850f1
     volumes:
-      - /node_modeules
+      - /node_modules
       - ./:/app
     ports:
-      - 3000:3000
+      - "3000:3000"
     expose:
-      - 3000
+      - "3000"
     command: "npm start"
+
+volumes:
+  cattle_mongo_data:

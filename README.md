@@ -26,7 +26,9 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+NestJS API for the cattle / PinHerd Flutter app (`../cattle_flutter`). Listen port comes from `.env` **`PORT`** (local default **3001**). Mongo from `.env` (`MONGO_*`). Swagger: `http://127.0.0.1:3001/api`.
+
+Point the Flutter client at this process via `cattle_flutter/lib/utils/PinConfig.dart` (`127.0.0.1` / `3001`). Full steps + **local OTP** (Mongo `authcodes`): **API / PinConfig** in `cattle_flutter/README.md`. Contract smoke: `npm run smoke:v1`.
 
 ## Installation
 
@@ -35,6 +37,8 @@ $ npm install
 ```
 
 ## Running the app
+
+Requires MongoDB matching `.env`. Then:
 
 ```bash
 # development

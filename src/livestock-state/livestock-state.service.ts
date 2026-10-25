@@ -54,7 +54,7 @@ export class LivestockStateService {
     return new ListAllLivestockResponseDto(
       query.pageSize,
       query.offset,
-      await this.livestockStateModel.count(filter),
+      await this.livestockStateModel.countDocuments(filter),
       await this.livestockStateModel
         .find(filter)
         .limit(query.pageSize)
@@ -63,7 +63,7 @@ export class LivestockStateService {
   }
 
   findLivestockStateAndRemove(livestock_id: string, stateId: string) {
-    const state = this.livestockStateModel.findOneAndRemove({
+    const state = this.livestockStateModel.findOneAndDelete({
       livestock_id: livestock_id,
       _id: stateId,
     });

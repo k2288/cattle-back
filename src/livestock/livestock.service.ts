@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { CreateLivestockDto } from './dto/create-livestock.dto';
 import { UpdateLivestockDto } from './dto/update-livestock.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Livestock } from './schemas/livestock.schema';
+import { Livestock, LivestockDocument } from './schemas/livestock.schema';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 import { ListAllLivestockResponseDto } from './dto/list-all-livestock-response.dto';
@@ -11,11 +11,10 @@ import { LivestockStateService } from '../livestock-state/livestock-state.servic
 import { CreateLivestockStateDto } from './dto/create-livestock-state.dto';
 import { UpdateLivestockStateDto } from './dto/update-livestock-state.dto';
 import { ListAllLivestockDto } from './dto/list-all-livestock.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ListAllLivestockStateDto } from './dto/list-all-livestock-state.dto';
 import { AddLivestockMilkDto } from './dto/add-livestock-milk.dto';
 import { dashboardConst } from '../dashboard/dashboard.const';
-import { ObjectID } from 'mongodb';
 
 @Injectable({ scope: Scope.REQUEST })
 export class LivestockService {
@@ -44,7 +43,7 @@ export class LivestockService {
     return new ListAllLivestockResponseDto(
       query.pageSize,
       query.offset,
-      await this.livestockModel.count(filter),
+      await this.livestockModel.countDocuments(filter),
       await this.livestockModel
         .find(filter)
         .limit(query.pageSize)
@@ -54,7 +53,7 @@ export class LivestockService {
 
   async findOne(id: string) {
     return this.livestockModel.findOne({
-      _id: new ObjectID(id),
+      _id: new Types.ObjectId(id),
       user_id: (this.request.user as AuthPayload).user_id,
     });
   }
@@ -69,8 +68,8 @@ export class LivestockService {
   }
 
   async remove(id: string) {
-    const livestock = await this.livestockModel.findOneAndRemove({
-      _id: new ObjectID(id),
+    const livestock = await this.livestockModel.findOneAndDelete({
+      _id: new Types.ObjectId(id),
       user_id: (this.request.user as AuthPayload).user_id,
     });
 
@@ -120,7 +119,10 @@ export class LivestockService {
     return {};
   }
 
-  private async updateLivestockLastState(id: string, livestock: Livestock) {
+  private async updateLivestockLastState(
+    id: string,
+    livestock: LivestockDocument,
+  ) {
     const lastState = await this.livestockStateService.findLastStateOfLivstock(
       id,
     );
@@ -137,9 +139,9 @@ export class LivestockService {
     return this.livestockStateService.findAllLivestockState(id, query);
   }
 
-  addLivestockMilk(id: string, milkData: AddLivestockMilkDto) {
-    const livestock = this.livestockModel.findOneAndUpdate(
-      { _id: id, user_id: (this.request.user as AuthPayload).user_id },
+  async addLivestockMilk(id: string, milkData: AddLivestockMilkDto) {
+    const livestock = await this.livestockModel.findOneAndUpdate(
+      { _id: new Types.ObjectId(id), user_id: (this.request.user as AuthPayload).user_id },
       { $push: { milks: milkData } },
     );
 
@@ -150,11 +152,11 @@ export class LivestockService {
 
   getStateCount(state: any) {
     if (dashboardConst.TOTAL === state) {
-      return this.livestockModel.count({
+      return this.livestockModel.countDocuments({
         user_id: (this.request.user as AuthPayload).user_id,
       });
     } else {
-      return this.livestockModel.count({
+      return this.livestockModel.countDocuments({
         user_id: (this.request.user as AuthPayload).user_id,
         state: state,
       });
@@ -162,7 +164,7 @@ export class LivestockService {
   }
 
   async getGenderCount(gender: any) {
-    return this.livestockModel.count({
+    return this.livestockModel.countDocuments({
       user_id: (this.request.user as AuthPayload).user_id,
       gender: gender,
     });

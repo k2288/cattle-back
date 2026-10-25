@@ -6,15 +6,13 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { HeaderResolver, I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { LivestockModule } from './livestock/livestock.module';
 import { LivestockStateModule } from './livestock-state/livestock-state.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SettingModule } from './setting/setting.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import path from 'path';
-
-
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -26,12 +24,10 @@ import path from 'path';
     ConfigModule.forRoot(),
     MongooseModule.forRoot(
       `mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=admin`,
-      { useNewUrlParser: true },
     ),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
-      parser: I18nJsonParser,
-      parserOptions: {
+      loaderOptions: {
         path: path.join(__dirname, '/i18n/'),
       },
       resolvers: [new HeaderResolver(['x-custom-lang'])],

@@ -1,10 +1,12 @@
-import { Document, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Milk } from '../models/milk';
 import { ApiProperty } from '@nestjs/swagger';
 
+export type LivestockDocument = HydratedDocument<Livestock>;
+
 @Schema({ timestamps: true })
-export class Livestock extends Document {
+export class Livestock {
   @ApiProperty()
   _id: Types.ObjectId;
 

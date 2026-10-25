@@ -7,7 +7,7 @@ export class ListAllLivestockDto extends ListAllEntitiesDto {
   @ApiProperty({ type: [String] })
   @IsArray()
   @IsOptional()
-  @Transform((value: string) => {
+  @Transform(({ value }) => {
     if (typeof value === 'string') {
       return [value];
     }
@@ -18,7 +18,7 @@ export class ListAllLivestockDto extends ListAllEntitiesDto {
   @ApiProperty({ type: [String] })
   @IsArray()
   @IsOptional()
-  @Transform((value: string) => {
+  @Transform(({ value }) => {
     if (typeof value === 'string') {
       return [value];
     }
